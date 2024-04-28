@@ -19,16 +19,24 @@ def create_app():
     #Create Flask instance, this will be used to run and configure apllication and its returned in this funtion return
     application = Flask(__name__)
 
+    #Secret key is safty feature, before pass this to production i rekomend change it.
+    #Database URI define name of the database and its type, db will be created in ../instance/database.db
     application.config['SECRET_KEY'] = 'secretly_secret'
     application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 
+    #Binding database with Flask application, required to both work with each other,
+    #can be perform instead when initializing SQLAlchemy object,
+    #but in this case application had to be passed to do this which will cause cirrcular import
     db.init_app(application)
 
+    #this will create tables in db if required,
+    #note that whis will not change tables which was previously created if their models are changed,
+    #note that all models have to be imported before this line
     with application.app_context():
         db.create_all()
 
     return application
 
-
+#creating the instance of Flask application
 app = create_app()
 
