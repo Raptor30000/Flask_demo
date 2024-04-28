@@ -18,5 +18,6 @@ def test():
 
 @main.route('/', methods=['POST'])
 def test_echo():
+    """Endpoint with POST work as echo JSON serwer for integration tests"""
     request_body = request.json
     return jsonify(request_body)

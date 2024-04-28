@@ -35,6 +35,7 @@ def create_app():
     with application.app_context():
         db.create_all()
 
+    #importing main Blueprint object and registering it in app
     from .main import main
     application.register_blueprint(blueprint=main)
 
