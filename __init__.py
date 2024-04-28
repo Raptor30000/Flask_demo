@@ -35,8 +35,11 @@ def create_app():
     with application.app_context():
         db.create_all()
 
+    from .main import main
+    application.register_blueprint(blueprint=main)
+
     return application
+
 
 #creating the instance of Flask application
 app = create_app()
-
