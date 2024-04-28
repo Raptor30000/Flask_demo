@@ -1,0 +1,17 @@
+The portal is written in Python3.12. If you had problems with installing Flask or anything by pip try this commands first
+
+Upgrade pip
+py -m ensurepip --upgrade
+
+upgrade virtualenv
+pip install --upgrade virtualenv
+
+then try to manualy install Flask
+pip install Flask
+
+after or before installing Flask upgrade setuptools as well,
+ this module was changed form 3.10 up so not upgrating could cause problems with distutils during installatiopns
+python -m pip install --upgrade setuptools
+
+After installing python3.12 and content of requirements.txt you should be able to run application on locally with command
+flask --app . run
