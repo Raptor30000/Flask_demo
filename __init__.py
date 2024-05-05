@@ -3,7 +3,7 @@
 from flask import Flask
 from .database import db
 from .models import User, Recipes, Timers, Ingredients
-
+from flask_login import LoginManager
 
 
 def create_app():
@@ -24,10 +24,23 @@ def create_app():
     application.config['SECRET_KEY'] = 'secretly_secret'
     application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 
+    #Initalizing Login manager which will be responsible for managing logged users sessions
+    login_manager = LoginManager()
+    #Setting up where user will be redireted if tried to reach login_required enpoind while not beeing logged in
+    #The shema is "blueprint_name.function_name"
+    login_manager.login_view = 'main.test'
+    #Bind login manager with the flask application
+    login_manager.init_app(application)
+
     #Binding database with Flask application, required to both work with each other,
     #can be perform instead when initializing SQLAlchemy object,
     #but in this case application had to be passed to do this which will cause cirrcular import
     db.init_app(application)
+
+    #This function binds user_id from login manager with record id in the table Users in the database
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
 
     #this will create tables in db if required,
     #note that whis will not change tables which was previously created if their models are changed,
@@ -35,7 +48,11 @@ def create_app():
     with application.app_context():
         db.create_all()
 
-    #importing main Blueprint object and registering it in app
+    #Register blueprint for authorization specjalized enpoints
+    from .auth import auth
+    application.register_blueprint(blueprint=auth)
+
+    #Register blueprint for non access restricted endpoints
     from .main import main
     application.register_blueprint(blueprint=main)
 

@@ -4,9 +4,10 @@ to make work with db easier without need of working on  raw SQL's
 This tables will be develop in future"""
 
 from .database import db
+from flask_login import UserMixin
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     """The table hold data about users"""
     id = db.Column(db.Integer, primary_key=True)  # primary keys are required by SQLAlchemy
     email = db.Column(db.String(100), unique=True)
