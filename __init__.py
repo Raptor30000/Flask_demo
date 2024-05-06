@@ -2,7 +2,7 @@
 
 from flask import Flask
 from .database import db
-from .models import User, Recipes, Timers, Ingredients
+from .models import User
 from flask_login import LoginManager
 
 
@@ -49,12 +49,12 @@ def create_app():
         db.create_all()
 
     #Register blueprint for authorization specjalized enpoints
-    from .auth import auth
-    application.register_blueprint(blueprint=auth)
+    from .api_v1.auth import auth_api
+    application.register_blueprint(blueprint=auth_api)
 
     #Register blueprint for non access restricted endpoints
-    from .main import main
-    application.register_blueprint(blueprint=main)
+    from .api_v1.main import main_api
+    application.register_blueprint(blueprint=main_api)
 
     return application
 

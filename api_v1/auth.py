@@ -2,15 +2,15 @@
 import flask_login
 from flask import Blueprint, request, jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
-from .models import *
+from ..models import *
 from flask_login import login_user, login_required, logout_user
 from datetime import datetime
 
 #Create a bluprint class and add authorization enpoitns to it to register it in flask application and in the login maganer
-auth = Blueprint('auth', __name__)
+auth_api = Blueprint('auth_api', __name__,url_prefix="/api/v1/")
 
 
-@auth.route('/signup', methods=['POST'])
+@auth_api.route('/signup', methods=['POST'])
 def signup_post():
     """Main purpouse of this enpoint is to allow users to create an account with
     email, name and password required """
@@ -51,7 +51,7 @@ def signup_post():
 
     return jsonify("Signing up completed! Please Log in with you email and password")
 
-@auth.route('/login', methods=['POST'])
+@auth_api.route('/login', methods=['POST'])
 def login_post():
     """main purpous of this function is allow users to log in by sending request with credentials.
     This function should not be use for oauth logins. Oauth will be maintain in separate function in future"""
@@ -84,7 +84,7 @@ def login_post():
     return jsonify("Login succesfull!")
 
 
-@auth.route('/loggedUser', methods=['GET'])
+@auth_api.route('/loggedUser', methods=['GET'])
 @login_required
 def login_get():
     """Main purpouse of this function is to return data of the logged in user to show it on the page"""
@@ -102,7 +102,7 @@ def login_get():
         return jsonify("User not logged in!")
 
 
-@auth.route('/logout')
+@auth_api.route('/logout')
 @login_required
 def logout():
     """Endpoint allowing logged user to log out"""

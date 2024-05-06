@@ -3,20 +3,20 @@
  for autorization process use auth Blueprint"""
 
 from flask import Blueprint, jsonify, request
-from .models import *
-from . import db
+from ..models import *
+from .. import db
 
 #creating a Flask Blueprint instance to be register in __init__ and to attach main endpoint to it
-main = Blueprint("main", __name__)
+main_api = Blueprint("main", __name__, url_prefix="/api/v1/")
 
 
-@main.route('/', methods=['GET'])
+@main_api.route('/', methods=['GET'])
 def test():
     """Endpoint dedicated to integration purpouse to check if you have acces to api"""
     return jsonify("This is test response to check if you have access to this API")
 
 
-@main.route('/', methods=['POST'])
+@main_api.route('/', methods=['POST'])
 def test_echo():
     """Endpoint with POST work as echo JSON serwer for integration tests"""
     request_body = request.json
