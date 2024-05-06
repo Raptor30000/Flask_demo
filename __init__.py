@@ -1,6 +1,6 @@
 #Purpouse of this file is to by run by by deployment infrastructure to start and configure the Flask application
 
-from flask import Flask
+from flask import Flask, jsonify
 from .database import db
 from .models import User
 from flask_login import LoginManager
@@ -55,6 +55,11 @@ def create_app():
     #Register blueprint for non access restricted endpoints
     from .api_v1.main import main_api
     application.register_blueprint(blueprint=main_api)
+
+    #This function allow to specyfie response when unauthorized user trying to reach restricted endpoint
+    @login_manager.unauthorized_handler
+    def unauthorized_callback():
+        return jsonify("This enpoint is only allowed for logged in users! Please log in or sign up"), 403
 
     return application
 

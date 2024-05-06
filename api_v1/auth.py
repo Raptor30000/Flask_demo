@@ -84,7 +84,7 @@ def login_post():
     return jsonify("Login succesfull!")
 
 
-@auth_api.route('/loggedUser', methods=['GET'])
+@auth_api.route('/user', methods=['GET'])
 @login_required
 def login_get():
     """Main purpouse of this function is to return data of the logged in user to show it on the page"""
