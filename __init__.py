@@ -1,9 +1,10 @@
 #Purpouse of this file is to by run by by deployment infrastructure to start and configure the Flask application
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, session
 from .database import db
 from .models import User
 from flask_login import LoginManager
+from datetime import timedelta
 
 
 def create_app():
@@ -60,6 +61,19 @@ def create_app():
     @login_manager.unauthorized_handler
     def unauthorized_callback():
         return jsonify("This enpoint is only allowed for logged in users! Please log in or sign up"), 403
+
+    #This function set session as not permanent and set its lifetime
+    @application.before_request
+    def set_session_lifetime():
+        #Setting this variable true causing created cookies to have expiration date,
+        #it can be set as false as well and app still will be restricting access to the restricted endpoints,
+        #but its better to give browser expiration date directly in the cookie
+        session.permanent = True
+        #This variable determines sessions and cookies lieftime
+        app.permanent_session_lifetime = timedelta(seconds=10)
+        #This will allow to refresh lifetime of the sessions and cookies after communication with server
+        #if this value will be set to False session will expire after time since login not since last communication
+        session.modified = True
 
     return application
 
